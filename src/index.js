@@ -32,5 +32,21 @@ server.get("/movies", (req, resp) => {
   resp.json(responseForUser);
 });
 
+server.post("/login", (req, resp) => {
+  if (req.body.email === '' || req.body.password === '') {
+    const restError = {
+      success: false,
+      message: 'faltan campos por rellenar'
+    }
+    resp.json(restError);
+  } else {
+    const respTrue = {
+      success: true,
+    }
+    resp.json(respTrue);
+  }
+});
+
+
 const staticServerPathWeb = "./src/public-react";
 server.use(express.static(staticServerPathWeb));
