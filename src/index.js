@@ -20,9 +20,10 @@ de una petición (request)*/
 
 //4.2 Pedir todas las películas
 server.get("/movies", (req, resp) => {
-  const selectedMovies = resp.query.gender ? resp.query.gender : "";
+  console.log(req.query);
+  const selectedMovies = req.query.gender ? req.query.gender : "all";
   const filteredMovies = moviesList.filter(
-    (oneMovie) => oneMovie === selectedMovies
+    (oneMovie) => selectedMovies === "all" || oneMovie.gender === selectedMovies
   );
   const responseForUser = {
     success: true,
