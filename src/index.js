@@ -1,4 +1,4 @@
-const movies = require("./data/movies.json");
+const moviesList = require("./data/movies.json");
 const express = require("express");
 const cors = require("cors");
 
@@ -20,8 +20,8 @@ de una petición (request)*/
 
 //4.2 Pedir todas las películas
 server.get("/movies", (req, resp) => {
-  const selectedMovies = resp.query.gender;
-  const filteredMovies = selectedMovies.filter(
+  const selectedMovies = resp.query.gender ? resp.query.gender : "";
+  const filteredMovies = moviesList.filter(
     (oneMovie) => oneMovie === selectedMovies
   );
   const responseForUser = {
