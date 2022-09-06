@@ -1,17 +1,25 @@
+/*NOTA: estructura de un documento/servicio de fetch:
+- cqs
+- fetch
+- variables auxiliares*/
+
+//DOCUMENT.QUERYSELECTORS
+const inputValue = document.querySelector(".form__input-text");
+
 // login
 
 const getMoviesFromApi = (params) => {
   console.log("Se están pidiendo las películas de la app");
   console.log(params);
-  // CAMBIA ESTE FETCH PARA QUE APUNTE A UN ENDPOINT DE TU SERVIDOR, PIENSA SI DEBE SER GET O POST, PIENSA QUÉ DATOS DEBES ENVIAR, ETC (hecho)
-  return fetch(`//localhost:4000/movies`)
+  return fetch(`//localhost:4000/movies?gender=${params.gender}`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      // CAMBIA EL CONTENIDO DE ESTE THEN PARA GESTIONAR LA RESPUESTA DEL SERVIDOR Y RETORNAR AL COMPONENTE APP LO QUE NECESITA
       return data;
     });
 };
+
+/*NOTA: el objeto "params" viene de App.js linea 42*/
 
 const objToExport = {
   getMoviesFromApi: getMoviesFromApi,

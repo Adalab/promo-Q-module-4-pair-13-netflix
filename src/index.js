@@ -1,4 +1,4 @@
-const movies = require("./data/movies.json");
+const moviesList = require("./data/movies.json");
 const express = require("express");
 const cors = require("cors");
 
@@ -12,18 +12,25 @@ const serverPort = 4000;
 server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
 });
-//queryParams
-const queryParams = `?gender=${filterGender.value}`;
+
+/*NOTA: req.query y req.body son métodos de Express, 
+hay más información sobre ellos en la documentación;
+básicamente son para marcar los queryParams y los bodyParams
+de una petición (request)*/
 
 //4.2 Pedir todas las películas
 server.get("/movies", (req, resp) => {
-  resp.json({
+  console.log(req.query);
+  const selectedMovies = req.query.gender ? req.query.gender : "all";
+  const filteredMovies = moviesList.filter(
+    (oneMovie) => selectedMovies === "all" || oneMovie.gender === selectedMovies
+  );
+  const responseForUser = {
     success: true,
-    movies: movies,
-  });
-  console.log(resp);
-
+    movies: filteredMovies,
+  };
+  resp.json(responseForUser);
 });
 
-const staticServerPathWeb = './src/public-react';
+const staticServerPathWeb = "./src/public-react";
 server.use(express.static(staticServerPathWeb));
