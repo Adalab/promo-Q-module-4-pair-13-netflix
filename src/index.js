@@ -1,3 +1,4 @@
+const movies = require("./data/movies.json");
 const express = require("express");
 const cors = require("cors");
 
@@ -11,27 +12,14 @@ const serverPort = 4000;
 server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
 });
+//queryParams
+const queryParams = `?gender=${filterGender.value}`;
 
 //4.2 Pedir todas las películas
 server.get("/movies", (req, resp) => {
   resp.json({
     success: true,
-    movies: [
-      {
-        id: "1",
-        title: "Gambita de dama",
-        gender: "Drama",
-        image:
-          "//beta.adalab.es/curso-intensivo-fullstack-recursos/apis/netflix-v1/images/gambito-de-dama.jpg",
-      },
-      {
-        id: "2",
-        title: "Friends",
-        gender: "Comedia",
-        image:
-          "//beta.adalab.es/curso-intensivo-fullstack-recursos/apis/netflix-v1/images/friends.jpg",
-      },
-    ],
+    movies: movies,
   });
   console.log(resp);
 
