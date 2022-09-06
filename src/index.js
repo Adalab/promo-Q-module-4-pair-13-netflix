@@ -34,4 +34,8 @@ server.get("/movies", (req, resp) => {
     ],
   });
   console.log(resp);
+
 });
+
+const staticServerPathWeb = './src/public-react';
+server.use(express.static(staticServerPathWeb));
