@@ -1,6 +1,6 @@
 // login
 
-//data te lo manda Login.js
+//data (que tiene el email y la password) te lo manda Login.js
 const sendLoginToApi = (data) => {
   const bodyParams = {
     email: `${data.email}`,

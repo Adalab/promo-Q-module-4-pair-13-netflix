@@ -1,4 +1,7 @@
+//datos
 const moviesList = require("./data/movies.json");
+
+//extensiones, librerías, etc.
 const express = require("express");
 const cors = require("cors");
 const ejs = require("ejs");
@@ -18,7 +21,7 @@ server.listen(serverPort, () => {
 /*NOTA: req.query y req.body son métodos de Express, 
 hay más información sobre ellos en la documentación;
 básicamente son para marcar los queryParams y los bodyParams
-de una petición (request)*/
+de una petición (request). Mirar la tabla-resumen para terminar de entenderlo*/
 
 //4.2 Pedir todas las películas
 server.get("/movies", (req, resp) => {
@@ -50,6 +53,7 @@ server.post("/login", (req, resp) => {
 });
 
 //Motor de plantillas
+//NOTA SOBRE LAS RUTAS: en los imports, se escriben desde el index.js y en el resto, desde la raíz
 server.get("/movie/:movieId", (req, resp) => {
   console.log(req.params.movieId);
   const foundedMovie = moviesList.find(
@@ -59,8 +63,6 @@ server.get("/movie/:movieId", (req, resp) => {
   resp.render("movieDetail", foundedMovie);
 });
 
-//estáticos
+//Servidor de estáticos (siempre al final, para que renderice primero lo dinámico)
 const staticServerPathWeb = "./src/public-react";
 server.use(express.static(staticServerPathWeb));
-
-//RUTAS: en los imports, desde el index.js y en el resto, desde la raíz
