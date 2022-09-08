@@ -1,5 +1,5 @@
 // login
-import users from '../../../src/data/users.json';
+import users from '../../../src/data/users.json'
 const sendLoginToApi = data => {
 
   const bodyParams = {
