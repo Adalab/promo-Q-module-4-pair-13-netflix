@@ -1,9 +1,4 @@
 // login
-<<<<<<< HEAD
-import users from '../../../src/data/users.json'
-const sendLoginToApi = data => {
-=======
->>>>>>> 51c429e6b39080fed6045956c4960484982d91fe
 
 //data (que tiene el email y la password) te lo manda Login.js
 const sendLoginToApi = (data) => {
@@ -30,18 +25,21 @@ const sendLoginToApi = (data) => {
 // signup
 
 const sendSingUpToApi = (data) => {
+  const bodyParams = {
+    email: `${data.email}`,
+    password: `${data.password}`,
+  };
   console.log("Se están enviando datos al signup:", data);
-  // CAMBIA ESTE FETCH PARA QUE APUNTE A UN ENDPOINT DE TU SERVIDOR, PIENSA SI DEBE SER GET O POST, PIENSA QUÉ DATOS DEBES ENVIAR, ETC
-  return fetch(
-    "//beta.adalab.es/curso-intensivo-fullstack-recursos/apis/netflix-v1/empty.json"
-  )
+  return fetch("http://localhost:4000/signup", {
+    method: "POST",
+    body: JSON.stringify(bodyParams),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
-    .then(() => {
-      // CAMBIA EL CONTENIDO DE ESTE THEN PARA GESTIONAR LA RESPUESTA DEL SERVIDOR Y RETORNAR AL COMPONENTE APP LO QUE NECESITA
-      return {
-        success: false,
-        errorMessage: "Usuario ya existente",
-      };
+    .then((data) => {
+      return data;
     });
 };
 

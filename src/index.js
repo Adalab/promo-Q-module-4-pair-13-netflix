@@ -11,6 +11,8 @@ const ejs = require("ejs");
 const server = express();
 server.use(cors());
 server.use(express.json());
+
+//databases
 const db = new dataBase("./src/movies.db", { verbose: console.log });
 server.set("view engine", "ejs");
 
@@ -26,14 +28,17 @@ básicamente son para marcar los queryParams y los bodyParams
 de una petición (request). Mirar la tabla-resumen para terminar de entenderlo*/
 
 //4.2 Pedir todas las películas
+/* "todas"a veces viene vacío y a veces con "all" */
 server.get("/movies", (req, resp) => {
-
   // const query = db.prepare(`SELECT * FROM movies WHERE LOWER(gender)='comedia'`);
   let userMovie = [];
-  if (req.query.gender === '') {
-    const query = db.prepare(`SELECT * FROM movies ORDER BY title DESC`); userMovie = query.all();
+  if (req.query.gender === "all" || req.query.gender === "") {
+    const query = db.prepare(`SELECT * FROM movies ORDER BY name DESC`);
+    userMovie = query.all();
   } else {
-    const query = db.prepare(`SELECT * FROM movies WHERE gender = ? ORDER BY title DESC`);
+    const query = db.prepare(
+      `SELECT * FROM movies WHERE gender = ? ORDER BY name DESC`
+    );
     userMovie = query.all(req.query.gender);
   }
 
@@ -46,9 +51,7 @@ server.get("/movies", (req, resp) => {
   };
 
   resp.json(responseForUser);
-
 });
-
 
 server.post("/login", (req, resp) => {
   if (req.body.email === "" || req.body.password === "") {
@@ -60,6 +63,29 @@ server.post("/login", (req, resp) => {
   } else {
     const respTrue = {
       success: true,
+    };
+    resp.json(respTrue);
+  }
+});
+
+//endpoint para sign-up
+server.post("/signup", (req, resp) => {
+  if (req.body.email === "" || req.body.password === "") {
+    const restError = {
+      success: false,
+      message: "faltan campos por rellenar",
+    };
+    resp.json(restError);
+  } else {
+    //insert
+    const query = db.prepare(
+      `INSERT INTO users (email, password) VALUES (?, ?)`
+    );
+    const results = query.run(`${req.body.email}`, `${req.body.password}`);
+    console.log(results);
+    const respTrue = {
+      success: true,
+      data: results,
     };
     resp.json(respTrue);
   }
