@@ -91,6 +91,9 @@ server.post("/signup", (req, resp) => {
   }
 });
 
+
+
+
 //Código para crear un servidor de estáticos
 
 //Motor de plantillas
@@ -103,6 +106,19 @@ server.get("/movie/:movieId", (req, resp) => {
   console.log(foundedMovie);
   resp.render("movieDetail", foundedMovie);
 });
+
+
+server.get("/user/movies", (req, resp) => {
+  console.log(req.headers);
+  console.log('holita');
+  const favorites =
+  {
+    "success": true,
+    "movies": []
+  }
+  resp.render(favorites)
+})
+
 
 //Servidor de estáticos (siempre al final, para que renderice primero lo dinámico)
 const staticServerPathWeb = "./src/public-react";
