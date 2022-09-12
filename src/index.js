@@ -6,6 +6,7 @@ const express = require("express");
 const cors = require("cors");
 const dataBase = require("better-sqlite3");
 const ejs = require("ejs");
+const { query } = require("express");
 
 // create and config server
 const server = express();
@@ -57,15 +58,30 @@ server.post("/login", (req, resp) => {
   if (req.body.email === "" || req.body.password === "") {
     const restError = {
       success: false,
-      message: "faltan campos por rellenar",
-    };
+      errorMessage: "faltan campos por rellenar",
+    }; //errorMessage se llama así en el front (App.js)
     resp.json(restError);
   } else {
-    const respTrue = {
-      success: true,
-    };
-    resp.json(respTrue);
-  }
+    const query = db.prepare(
+      "SELECT id FROM users WHERE email=? AND password=?"
+    );
+    const result = query.get(req.body.email, req.body.password);
+    //query run es para insertar, eliminar, etc.; para sacar cosas de la BD es get u all
+    console.log(result);
+    if (result === undefined) {
+      const restError = {
+        success: false,
+        errorMessage: "tus datos no son correctos",
+      };
+      resp.json(restError);
+    } else {
+      const respTrue = {
+        success: true,
+        userId: `${result.id}`,
+      };
+      resp.json(respTrue);
+    }
+  } //if dentro de else porque necesitamos el id
 });
 
 //endpoint para sign-up
@@ -91,9 +107,6 @@ server.post("/signup", (req, resp) => {
   }
 });
 
-
-
-
 //Código para crear un servidor de estáticos
 
 //Motor de plantillas
@@ -104,21 +117,18 @@ server.get("/movie/:movieId", (req, resp) => {
     (movie) => movie.id === req.params.movieId
   );
   console.log(foundedMovie);
-  resp.render("movieDetail", foundedMovie);
+  resp.render("movieDetail", foundedMovie); //movieDetail es el ejs
 });
-
 
 server.get("/user/movies", (req, resp) => {
   console.log(req.headers);
-  console.log('holita');
-  const favorites =
-  {
-    "success": true,
-    "movies": []
-  }
-  resp.render(favorites)
-})
-
+  console.log("holita");
+  const favorites = {
+    success: true,
+    movies: [],
+  };
+  resp.json(favorites);
+});
 
 //Servidor de estáticos (siempre al final, para que renderice primero lo dinámico)
 const staticServerPathWeb = "./src/public-react";
